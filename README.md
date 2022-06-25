@@ -36,3 +36,9 @@ argocd app sync apps --prune
 4. Point external DNS at the ingress load balancer VIP
 
 5. The end
+
+
+There was one thing I had to manually apply this CRD manifest because argo/helm/kubernetes thought it was too long
+`k create -f https://raw.githubusercontent.com/prometheus-community/helm-charts/main/charts/kube-prometheus-stack/crds/crd-prometheuses.yaml`
+
+
