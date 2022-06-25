@@ -3,3 +3,5 @@ postgresql:
     storageClass: longhorn
   metrics:
     enabled: true
+  auth:
+    database: mydb
