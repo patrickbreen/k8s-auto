@@ -16,7 +16,7 @@ argocd login <ARGOCD_SERVER>
 argocd account update-password
 
 argocd app create apps --repo https://github.com/patrickbreen/k8s-auto.git --path apps --dest-server https://kubernetes.default.svc --dest-namespace default
-argocd app sync apps
+argocd app sync apps --prune
 
 
  3. Install custom manifests to control (repo)
