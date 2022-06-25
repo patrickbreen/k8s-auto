@@ -9,6 +9,16 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
    4. Install cert-manager (helm)
    5. Install Keycloak (helm)
    6. Install Postgres (helm)
+
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+argocd login <ARGOCD_SERVER>
+argocd account update-password
+
+argocd app create apps --repo https://github.com/patrickbreen/k8s-auto.git --path apps --dest-server https://kubernetes.default.svc --dest-namespace default
+argocd app sync apps
+
+
  3. Install custom manifests to control (repo)
    - my ingress (load balanced, ingres objects for web guis)
    - my certs (lets encrypt)
