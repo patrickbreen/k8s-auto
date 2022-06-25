@@ -2,21 +2,21 @@
 
 App of apps (helm waves)
    1. Wave 1
-    - Install Longhorn with ArgoCD app of apps (helm with prometheus exporter)
-    - Install kube-prometheus (helm)
-    - Install nginx-ingress (the kubernetes one with helm)
-    - Install cert-manager (helm)
-    - Install Keycloak (helm)
-    - Install Postgres (helm)
-    - Install Minio (helm)
+    * Install Longhorn with ArgoCD app of apps (helm with prometheus exporter)
+    * Install kube-prometheus (helm)
+    * Install nginx-ingress (the kubernetes one with helm)
+    * Install cert-manager (helm)
+    * Install Keycloak (helm)
+    * Install Postgres (helm)
+    * Install Minio (helm)
    2. Wave 2
-     - my certs (lets encrypt)
-     - my ingresses
-     - my prometheus/grafana customization
-     - my postgres db
+    * my certs (lets encrypt)
+    * my ingresses
+    * my prometheus/grafana customization
+    * my postgres db
    3. Wave 3
-     - my app
-     - my canary
+    * my app
+    * my canary
 
 ### Bootstrap notes:
  1. Install argocd:
