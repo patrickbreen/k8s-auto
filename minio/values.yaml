@@ -1,0 +1,6 @@
+minio:
+  global:
+    storageClass: longhorn
+  metrics:
+    serviceMonitor:
+      enabled: true
