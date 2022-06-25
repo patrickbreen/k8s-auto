@@ -12,5 +12,5 @@ spec:
   project: default
   source:
     path: nginx-ingress
-    repoURL: https://helm.nginx.com/stable
-    targetRevision: 0.13.2
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
