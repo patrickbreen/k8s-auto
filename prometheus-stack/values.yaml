@@ -3,6 +3,7 @@ kube-prometheus-stack:
     storage:
       volumeClaimTemplate:
         spec:
+          storageClassName: longhorn
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
@@ -13,6 +14,7 @@ kube-prometheus-stack:
     storageSpec:
       volumeClaimTemplate:
         spec:
+          storageClassName: longhorn
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
