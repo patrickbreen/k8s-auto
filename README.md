@@ -12,15 +12,16 @@ App of apps (helm waves)
  * Install Minio (helm)
 
 2. Wave 2
- * my certs (lets encrypt)
+ * my certs (internal: self signed) (external: lets encrypt)
  * my ingresses
  * my prometheus/grafana customization
  * my postgres db
  * my github runner
 
 3. Wave 3
- * my app
- * my canary
+ * my app (with ArgoRollouts) (inprogress (gauge), time (summary/histo), n requests (counter))
+ * my canary (time (summary/histo), runs (counter), successes (counter))
+ * custom summary dashboard
 
 ### Bootstrap notes:
 1. Install argocd:
