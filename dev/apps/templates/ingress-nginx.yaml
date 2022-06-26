@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nginx-ingress
+  name: ingress-nginx
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -9,11 +9,11 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: nginx-ingress
+    namespace: ingress-nginx
     server: {{ .Values.spec.destination.server }}
   project: default
   source:
-    path: dev/nginx-ingress
+    path: dev/ingress-nginx
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
