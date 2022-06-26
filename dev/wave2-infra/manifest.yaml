@@ -6,12 +6,9 @@ metadata:
   name: argocd
   namespace: argocd
   annotations:
-    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
 spec:
-  tls:
-  - hosts:
-    - argocd.dev.leetcyber.com
-    secretName: argocd-internal-cert
   ingressClassName: internal-nginx
   rules:
   - host: argocd.dev.leetcyber.com
@@ -21,7 +18,7 @@ spec:
           service:
             name: argocd-server
             port:
-              number: 80
+              number: https
         path: /
         pathType: Prefix
 status:
