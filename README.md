@@ -5,7 +5,7 @@ App of apps (helm waves)
 1. Wave 1
  * Install Longhorn with ArgoCD app of apps (helm with prometheus exporter)
  * Install kube-prometheus (helm)
- * Install nginx-ingress (the kubernetes one with helm)
+ * Install ingress-nginx (the kubernetes one with helm)
  * Install cert-manager (helm)
  * Install Keycloak (helm)
  * Install Postgres (helm)
