@@ -47,27 +47,31 @@ There was one thing I had to manually apply this CRD manifest because argo/helm/
 
 ### Infra environment promotion strategy:
 1. no auto syncing in argocd (I'm going to allow auto syncing in dev though)
-2. on merge to main, pipeline deploys to dev, checks health, then deploys to prod, checks health etc.
+2. Merge request triggers kubesec scan
+3. on merge to main, pipeline deploys to dev, checks health, then deploys to prod, checks health etc.
 
 
 ### App repo layout:
 code/
 Dockerfile
 
-#### On merge request (also have a script.sh that can do this all locally, and pre-commit):
+#### On app repo merge request (also have a script.sh that can do this all locally, and pre-commit):
 1. Build code and Docker image
 2. Test Container (maybe parallel tests)
 3. Use kustomize or helm to generate manifests for each environment with the @hash of the docker image
    And verify that the generated manifests match the pre-commit generated manifests
-4. Push container
 
-#### On merge:
-1. Make commit to main and ArgoCD will pick it up and deploy it
+#### On app repo merge:
+1. Push container
+2. Make merge request to infra repository to update the image @hash
 
 ### Further things to do:
 storage: figure out storage replication
+db: actually handle the dbs in a safe way
+management: upgrades, HPA, pod antiaffinity, day 2 ops (automation)
+network: layer3 VIPs with BGP, more segmentation, etc.
 environments: actually run multi cluster multi environments
 security: OPA gatekeeper, falco, audit, trivy
 logging: stuff
-
+scaling teams: talk through how to split out teams/apps/repos, how to do multi prod.
 
