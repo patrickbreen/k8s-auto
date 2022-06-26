@@ -13,7 +13,7 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: default
   source:
-    path: nginx-ingress
+    path: dev/nginx-ingress
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
