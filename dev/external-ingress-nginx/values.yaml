@@ -1,0 +1,7 @@
+ingress-nginx:
+  controller:
+    ingressClassResource:
+      name: external-nginx
+      enabled: true
+      default: false
+      controllerValue: "k8s.io/external-ingress-nginx"
