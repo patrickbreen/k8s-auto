@@ -1,5 +1,11 @@
 ingress-nginx:
   controller:
+    metrics:
+      enabled: true
+      serviceMonitor:
+        additionalLabels:
+          release: prometheus-stack
+        enabled: true
     ingressClassResource:
       name: external-nginx
       enabled: true

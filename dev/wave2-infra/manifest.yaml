@@ -1,0 +1,176 @@
+---
+# Source: wave2-infra/templates/ingresses.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd
+  namespace: argocd
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - argocd.dev.leetcyber.com
+    secretName: argocd-internal-cert
+  ingressClassName: internal-nginx
+  rules:
+  - host: argocd.dev.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: argocd-server
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+# Source: wave2-infra/templates/ingresses.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: longhorn
+  namespace: longhorn
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - longhorn.dev.leetcyber.com
+    secretName: longhorn-internal-cert
+  ingressClassName: internal-nginx
+  rules:
+  - host: longhorn.dev.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: longhorn-frontend
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+# Source: wave2-infra/templates/ingresses.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak
+  namespace: keycloak
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - keycloak.dev.leetcyber.com
+    secretName: keycloak-internal-cert
+  ingressClassName: internal-nginx
+  rules:
+  - host: keycloak.dev.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: keycloak
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+# Source: wave2-infra/templates/ingresses.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio
+  namespace: minio
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - minio.dev.leetcyber.com
+    secretName: minio-internal-cert
+  ingressClassName: internal-nginx
+  rules:
+  - host: minio.dev.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: minio
+            port:
+              number: 9000
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+# Source: wave2-infra/templates/ingresses.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus
+  namespace: prometheus-stack
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - prometheus.dev.leetcyber.com
+    secretName: prometheus-internal-cert
+  ingressClassName: internal-nginx
+  rules:
+  - host: prometheus.dev.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: prometheus-stack-kube-prom-prometheus
+            port:
+              number: 9090
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+# Source: wave2-infra/templates/ingresses.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  namespace: prometheus-stack
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - grafana.dev.leetcyber.com
+    secretName: grafana-internal-cert
+  ingressClassName: internal-nginx
+  rules:
+  - host: grafana.dev.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: prometheus-stack-grafana
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+# Source: wave2-infra/templates/cluster-issuers.yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-cluster-issuer
+spec:
+  selfSigned: {}
