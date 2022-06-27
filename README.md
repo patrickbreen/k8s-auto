@@ -29,10 +29,14 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 2. Manage argocd:
+```
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 argocd login localhost:8080
+# use this after ingress has been installed:
+# argocd login argocd.dev.leetcyber.com
 argocd account update-password
+```
 
 3. Point external DNS at the ingress load balancer VIP
 
@@ -68,9 +72,7 @@ Dockerfile
 
 ### Hosted github runner:
 ```
-kubectl create secret generic controller-manager \
-    -n actions-runner-system \
-    --from-literal=github_token=${GITHUB_TOKEN}
+kubectl create secret generic controller-manager -n actions-runner-system --from-literal=github_token=${GITHUB_TOKEN}
 ```
 
 ### Further things to do:
