@@ -66,6 +66,13 @@ Dockerfile
 1. Push container
 2. Make merge request to infra repository to update the image @hash
 
+### Hosted github runner:
+```
+kubectl create secret generic controller-manager \
+    -n actions-runner-system \
+    --from-literal=github_token=${GITHUB_TOKEN}
+```
+
 ### Further things to do:
 storage: figure out storage replication
 db: actually handle the dbs in a safe way
@@ -75,4 +82,5 @@ environments: actually run multi cluster multi environments
 security: OPA gatekeeper, falco, audit, trivy
 logging: stuff
 scaling teams: talk through how to split out teams/apps/repos, how to do multi prod.
+
 
