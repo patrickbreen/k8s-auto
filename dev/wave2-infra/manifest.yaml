@@ -174,3 +174,21 @@ metadata:
   name: selfsigned-cluster-issuer
 spec:
   selfSigned: {}
+---
+# Source: wave2-infra/templates/github-runner.yaml
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: Runner
+metadata:
+  name: infra-runner
+spec:
+  repository: patrickbreen/k8s-auto
+  env: []
+---
+# Source: wave2-infra/templates/github-runner.yaml
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: Runner
+metadata:
+  name: tasks-runner
+spec:
+  repository: patrickbreen/k8s-tasks
+  env: []
