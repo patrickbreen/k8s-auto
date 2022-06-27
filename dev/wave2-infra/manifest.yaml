@@ -180,6 +180,7 @@ apiVersion: actions.summerwind.dev/v1alpha1
 kind: Runner
 metadata:
   name: infra-runner
+  namespace: github-runner
 spec:
   repository: patrickbreen/k8s-auto
   env: []
@@ -189,6 +190,7 @@ apiVersion: actions.summerwind.dev/v1alpha1
 kind: Runner
 metadata:
   name: tasks-runner
+  namespace: github-runner
 spec:
   repository: patrickbreen/k8s-tasks
   env: []
