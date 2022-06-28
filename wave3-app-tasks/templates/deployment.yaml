@@ -4,6 +4,7 @@ metadata:
   name: {{ include "tasks.fullname" . }}
   labels:
     {{- include "tasks.labels" . | nindent 4 }}
+  namespace: tasks
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}

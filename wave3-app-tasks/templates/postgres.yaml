@@ -8,6 +8,7 @@ metadata:
     spilo-role: master
     team: tasks
   name: tasks-postgres-master
+  namespace: tasks
 spec:
   internalTrafficPolicy: Cluster
   ipFamilies:
@@ -29,6 +30,7 @@ apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
   name: tasks-postgres
+  namespace: tasks
 spec:
   teamId: "tasks"
   volume:
