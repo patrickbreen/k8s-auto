@@ -39,8 +39,8 @@ spec:
   numberOfInstances: 2
   patroni:
     pg_hba:
-      - hostssl all all 10.42.0.0/16 md5
-      - host    all all 10.42.0.0/16 md5
+      - hostssl all all 0.0.0.0/0 md5
+      - host    all all 0.0.0.0/0 md5
   users:
     # database owner
     owner:
