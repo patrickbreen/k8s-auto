@@ -1,0 +1,190 @@
+---
+# Source: wave3-app-tasks/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wave3-app-tasks-dev
+namespace: tasks
+---
+# Source: wave3-app-tasks/templates/postgres.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2022-06-28T18:35:06Z"
+  labels:
+    application: spilo
+    cluster-name: tasks-postgres
+    spilo-role: master
+    team: tasks
+  name: tasks-postgres-master
+  namespace: tasks
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: postgresql
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    application: spilo
+    cluster-name: tasks-postgres
+    spilo-role: master
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: wave3-app-tasks/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: tasks
+namespace: tasks
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: wave3-app-tasks
+    app.kubernetes.io/instance: wave3-app-tasks-dev
+---
+# Source: wave3-app-tasks/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wave3-app-tasks-dev
+  labels:
+    helm.sh/chart: wave3-app-tasks-0.1.0
+    app.kubernetes.io/name: wave3-app-tasks
+    app.kubernetes.io/instance: wave3-app-tasks-dev
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  namespace: tasks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: wave3-app-tasks
+      app.kubernetes.io/instance: wave3-app-tasks-dev
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: wave3-app-tasks
+        app.kubernetes.io/instance: wave3-app-tasks-dev
+    spec:
+      serviceAccountName: wave3-app-tasks-dev
+      securityContext:
+        {}
+      containers:
+        - name: wave3-app-tasks
+          securityContext:
+            {}
+          image: "ghcr.io/patrickbreen/k8s-tasks@sha256:f6e5c05e4d01f48dbd738403e03169e13d53d45a00674f56991f59a2340c05d2"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: app-user.tasks-postgres.credentials.postgresql.acid.zalan.do
+                key: password
+          livenessProbe:
+            httpGet:
+              path: /api/v1/tasks/
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api/v1/tasks/
+              port: http
+          resources:
+            {}
+---
+# Source: wave3-app-tasks/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  namespace: prometheus-stack
+  annotations:
+    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    nginx.ingress.kubernetes.io/enable-owasp-core-rules: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+spec:
+  tls:
+  - hosts:
+    - tasks..leetcyber.com
+    secretName: tasks-external-cert
+  ingressClassName: external-nginx
+  rules:
+  - host: tasks..leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: tasks
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+# Source: wave3-app-tasks/templates/postgres.yaml
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: tasks-postgres
+  namespace: tasks
+spec:
+  teamId: "tasks"
+  volume:
+    size: 6Gi
+    storageClass: longhorn
+  numberOfInstances: 2
+  users:
+    # database owner
+    owner:
+    - superuser
+    - createdb
+    # role for application
+    app-user: []
+
+  #databases: name->owner
+  preparedDatabases:
+    tasks: {}
+  databases:
+    app: owner
+  postgresql:
+    version: "14"
+---
+# Source: wave3-app-tasks/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "wave3-app-tasks-dev-test-connection"
+  labels:
+    helm.sh/chart: wave3-app-tasks-0.1.0
+    app.kubernetes.io/name: wave3-app-tasks
+    app.kubernetes.io/instance: wave3-app-tasks-dev
+    app.kubernetes.io/version: "0.1.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['wave3-app-tasks-dev:80/api/v1/tasks']
+  restartPolicy: Never
