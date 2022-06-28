@@ -154,10 +154,10 @@ spec:
   numberOfInstances: 2
   patroni:
     pg_hba:
-      - local all all md5
-      - hostssl all all 0.0.0.0/0 md5
-      - host    all all 0.0.0.0/0 md5
-      - host    all all ::1/128   md5
+      - local all,replication all md5
+      - hostssl all,replication all 0.0.0.0/0 md5
+      - host    all,replication all 0.0.0.0/0 md5
+      - host    all,replication all ::1/128   md5
   users:
     # database owner
     owner:
