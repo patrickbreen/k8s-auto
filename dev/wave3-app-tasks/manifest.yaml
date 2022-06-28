@@ -123,11 +123,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - tasks..leetcyber.com
+    - tasks.dev.leetcyber.com
     secretName: tasks-external-cert
   ingressClassName: external-nginx
   rules:
-  - host: tasks..leetcyber.com
+  - host: tasks.dev.leetcyber.com
     http:
       paths:
       - backend:

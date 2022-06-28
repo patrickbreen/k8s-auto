@@ -4,6 +4,8 @@
 
 replicaCount: 1
 
+envName: dev
+
 image:
   repository: ghcr.io/patrickbreen/k8s-tasks
   pullPolicy: IfNotPresent
