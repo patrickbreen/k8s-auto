@@ -1,6 +1,6 @@
 apiVersion: v2
 name: postgres
-description: postgres dependency
+description: postgres-operator dependency
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -23,6 +23,6 @@ version: 0.1.0
 appVersion: "1.0"
 
 dependencies:
-- name: postgresql
-  version: 11.6.10
-  repository: https://charts.bitnami.com/bitnami
+- name: postgres-operator
+  version: 1.8.2
+  repository: https://opensource.zalando.com/postgres-operator/charts/postgres-operator

@@ -1,4 +1,4 @@
-# Outline of projects:
+# Outline of project:
 
 App of apps (helm waves)
 
@@ -20,10 +20,13 @@ App of apps (helm waves)
 
 3. Wave 3
  * my app (with ArgoRollouts) (inprogress (gauge), time (summary/histo), n requests (counter))
- * my canary (time (summary/histo), runs (counter), successes (counter))
- * custom summary dashboard
+ * my canary (time (summary/histo), failures (counter), successes (counter))
+ * App prometheus customization (ServiceMonitors)
+ * custom app grafana dashboard
 
 ### Bootstrap notes:
+0. Make a cluster. I used this (https://github.com/techno-tim/k3s-ansible), but you could run this pretty much anywhere, GKE, Rancher, kubespray, etc.
+
 1. Install argocd:
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -38,13 +41,13 @@ argocd login localhost:8080
 argocd account update-password
 ```
 
-3. Point external DNS at the ingress load balancer VIP
+3. Point external DNS at the external ingress load balancer VIP
 
 4. Bootstrap all the infra:
 argocd app create apps --repo https://github.com/patrickbreen/k8s-auto.git --path dev/apps --dest-server https://kubernetes.default.svc --dest-namespace default
 argocd app sync apps --prune
 
-5. The end
+5. There are a couple more things below, but that is basically it.
 
 
 There was one thing I had to manually apply this CRD manifest because argo/helm/kubernetes thought it was too long
@@ -57,9 +60,13 @@ There was one thing I had to manually apply this CRD manifest because argo/helm/
 
 
 ### App repo layout:
-code/
-Dockerfile
-
+```
+app/code/
+app/Dockerfile
+canary/code/
+canary/Dockerfile
+runner/Dockerfile
+```
 #### On app repo merge request (also have a script.sh that can do this all locally, and pre-commit):
 1. Build code and Docker image
 2. Test Container (maybe parallel tests)
@@ -72,17 +79,18 @@ Dockerfile
 
 ### Hosted github runner:
 ```
+# Instructions here: https://github.com/actions-runner-controller/actions-runner-controller
 kubectl create secret generic controller-manager -n actions-runner-system --from-literal=github_token=${GITHUB_TOKEN}
 ```
 
 ### Further things to do:
-storage: figure out storage replication
-db: actually handle the dbs in a safe way
-management: upgrades, HPA, pod antiaffinity, day 2 ops (automation)
-network: layer3 VIPs with BGP, more segmentation, etc.
-environments: actually run multi cluster multi environments
-security: OPA gatekeeper, falco, audit, trivy
-logging: stuff
-scaling teams: talk through how to split out teams/apps/repos, how to do multi prod.
+* storage: figure out storage replication
+* db: actually handle the dbs in a safe way
+* management: upgrades, HPA, pod antiaffinity, day 2 ops (automation)
+* network: layer3 VIPs with BGP, more segmentation, etc.
+* environments: actually run multi cluster multi environments
+* security: OPA gatekeeper, falco, audit, trivy
+* logging: Some centralized logging solution thing
+* scaling teams: talk through how to split out teams/apps/repos, how to do multi prod.
 
 
