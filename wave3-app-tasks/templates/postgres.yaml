@@ -41,6 +41,7 @@ spec:
     pg_hba:
       - hostssl all all 0.0.0.0/0 md5
       - host    all all 0.0.0.0/0 md5
+      - host    all all ::1/128   md5
   users:
     # database owner
     owner:
