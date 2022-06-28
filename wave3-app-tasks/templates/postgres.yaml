@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2022-06-28T18:35:06Z"
+  labels:
+    application: spilo
+    cluster-name: tasks-postgres
+    spilo-role: master
+    team: tasks
+  name: tasks-postgres-master
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: postgresql
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    application: spilo
+    cluster-name: tasks-postgres
+    spilo-role: master
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: tasks-postgres
+spec:
+  teamId: "tasks"
+  volume:
+    size: 6Gi
+    storageClass: longhorn
+  numberOfInstances: 2
+  users:
+    # database owner
+    owner:
+    - superuser
+    - createdb
+    # role for application
+    app-user: []
+
+  #databases: name->owner
+  preparedDatabases:
+    tasks: {}
+  databases:
+    app: owner
+  postgresql:
+    version: "14"
