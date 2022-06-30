@@ -1,0 +1,185 @@
+---
+# Source: wave3-app-tasks/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tasks
+  namespace: tasks
+---
+# Source: wave3-app-tasks/templates/postgres.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2022-06-28T18:35:06Z"
+  labels:
+    application: spilo
+    cluster-name: tasks-postgres
+    spilo-role: master
+    team: tasks
+  name: tasks-postgres-master
+  namespace: tasks
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: postgresql
+    port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    application: spilo
+    cluster-name: tasks-postgres
+    spilo-role: master
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: wave3-app-tasks/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: tasks
+  namespace: tasks
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/instance: wave3-app-tasks-dev
+    app.kubernetes.io/name: wave3-app-tasks
+---
+# Source: wave3-app-tasks/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: wave3-app-tasks
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wave3-app-tasks
+    app.kubernetes.io/version: 0.1.0
+    helm.sh/chart: wave3-app-tasks-0.1.0
+  name: wave3-app-tasks-dev
+  namespace: tasks
+spec:
+  replicas: replicaCount
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: wave3-app-tasks-dev
+      app.kubernetes.io/name: wave3-app-tasks
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/instance: wave3-app-tasks-dev
+        app.kubernetes.io/name: wave3-app-tasks
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: app-user.tasks-postgres.credentials.postgresql.acid.zalan.do
+        image: "ghcr.io/patrickbreen/k8s-tasks@sha256:f6e5c05e4d01f48dbd738403e03169e13d53d45a00674f56991f59a2340c05d2"
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /api/v1/tasks/
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: wave3-app-tasks
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /api/v1/tasks/
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+      serviceAccount: wave3-app-tasks-dev
+      serviceAccountName: wave3-app-tasks-dev
+---
+# Source: wave3-app-tasks/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tasks
+  namespace: tasks
+  annotations:
+    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    nginx.ingress.kubernetes.io/enable-owasp-core-rules: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+spec:
+  tls:
+  - hosts:
+    - tasks.dev.leetcyber.com
+    secretName: tasks-external-cert
+  ingressClassName: external-nginx
+  rules:
+  - host: tasks.dev.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: tasks
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+# Source: wave3-app-tasks/templates/postgres.yaml
+apiVersion: "acid.zalan.do/v1"
+kind: postgresql
+metadata:
+  name: tasks-postgres
+  namespace: tasks
+spec:
+  teamId: "tasks"
+  volume:
+    size: 6Gi
+    storageClass: longhorn
+  numberOfInstances: 2
+  patroni:
+    pg_hba:
+      - local all,replication all md5
+      - hostssl all,replication all 0.0.0.0/0 md5
+      - host    all,replication all 0.0.0.0/0 md5
+      - host    all,replication all ::1/128   md5
+  users:
+    # database owner
+    owner:
+    - superuser
+    - createdb
+    # role for application
+    app-user: []
+
+  #databases: name->owner
+  preparedDatabases:
+    tasks: {}
+  databases:
+    app: owner
+  postgresql:
+    version: "14"

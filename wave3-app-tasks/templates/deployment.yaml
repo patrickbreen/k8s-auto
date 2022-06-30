@@ -38,7 +38,7 @@ spec:
             secretKeyRef:
               key: password
               name: app-user.tasks-postgres.credentials.postgresql.acid.zalan.do
-        image: "{{ imageRepository }}@{{ imageHash }}"
+        image: "{{ .Values.imageRepository }}@{{ .Values.imageHash }}"
         ports:
         - containerPort: 8080
           name: http
