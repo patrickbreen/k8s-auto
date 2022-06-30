@@ -4,13 +4,14 @@ metadata:
   name: tasks
   namespace: tasks
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.targetPort }}
+    - port: 80
+      targetPort: 8080
       protocol: TCP
       name: http
   selector:
-    {{- include "tasks.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/instance: wave3-app-tasks-dev
+    app.kubernetes.io/name: wave3-app-tasks
 
 

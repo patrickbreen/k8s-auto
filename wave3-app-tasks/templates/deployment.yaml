@@ -1,70 +1,66 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "tasks.fullname" . }}
   labels:
-    {{- include "tasks.labels" . | nindent 4 }}
+    app.kubernetes.io/instance: wave3-app-tasks
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wave3-app-tasks
+    app.kubernetes.io/version: 0.1.0
+    helm.sh/chart: wave3-app-tasks-0.1.0
+  name: wave3-app-tasks-dev
   namespace: tasks
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: replicaCount
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
-      {{- include "tasks.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/instance: wave3-app-tasks-dev
+      app.kubernetes.io/name: wave3-app-tasks
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        prometheus.io/path: /metrics
+        prometheus.io/port: "8080"
+        prometheus.io/scrape: "true"
       labels:
-        {{- include "tasks.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/instance: wave3-app-tasks-dev
+        app.kubernetes.io/name: wave3-app-tasks
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "tasks.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}@{{ .Values.image.hash }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
-          env:
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: app-user.tasks-postgres.credentials.postgresql.acid.zalan.do
-                key: password
-          livenessProbe:
-            httpGet:
-              path: /api/v1/tasks/
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /api/v1/tasks/
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-
-
+      - env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: app-user.tasks-postgres.credentials.postgresql.acid.zalan.do
+        image: "{{ imageRepository }}@{{ imageHash }}"
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /api/v1/tasks/
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: wave3-app-tasks
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /api/v1/tasks/
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+      serviceAccount: wave3-app-tasks-dev
+      serviceAccountName: wave3-app-tasks-dev
