@@ -1,3 +1,4 @@
+replicaCount: 2
 envName: dev
 imageRepository: ghcr.io/patrickbreen/k8s-tasks
 imageHash: sha256:f6e5c05e4d01f48dbd738403e03169e13d53d45a00674f56991f59a2340c05d2
