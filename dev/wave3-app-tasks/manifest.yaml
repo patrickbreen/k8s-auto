@@ -117,8 +117,8 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-      serviceAccount: wave3-app-tasks-dev
-      serviceAccountName: wave3-app-tasks-dev
+      serviceAccount: tasks
+      serviceAccountName: tasks
 ---
 # Source: wave3-app-tasks/templates/ingress.yaml
 apiVersion: networking.k8s.io/v1
