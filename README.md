@@ -47,10 +47,12 @@ argocd account update-password
 argocd app create apps --repo https://github.com/patrickbreen/k8s-auto.git --path dev/apps --dest-server https://kubernetes.default.svc --dest-namespace default
 argocd app sync apps --prune
 
-5. There are a couple more things below, but that is basically it.
+5. Cert manager failed me, so I had to manually "kubectl edit" the ingresses it created for ACME to add the right ingress class "ingressClassName: external-nginx"
+
+6. There are a couple more things below, but that is basically it.
 
 
-There was one thing I had to manually apply this CRD manifest because argo/helm/kubernetes thought it was too long
+There was (atleast) one thing I had to manually apply this CRD manifest because argo/helm/kubernetes thought it was too long
 `k create -f https://raw.githubusercontent.com/prometheus-community/helm-charts/main/charts/kube-prometheus-stack/crds/crd-prometheuses.yaml`
 
 ### Infra environment promotion strategy:
