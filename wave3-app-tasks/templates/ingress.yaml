@@ -6,12 +6,12 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/enable-modsecurity: "true"
     nginx.ingress.kubernetes.io/enable-owasp-core-rules: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt-production"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
 spec:
   tls:
   - hosts:
     - tasks.{{ .Values.envName }}.leetcyber.com
-    secretName: tasks-external-cert-prod-clusterissuer
+    secretName: tasks-external-cert
   ingressClassName: external-nginx
   rules:
   - host: tasks.{{ .Values.envName }}.leetcyber.com
