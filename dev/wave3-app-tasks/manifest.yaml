@@ -134,7 +134,7 @@ spec:
   tls:
   - hosts:
     - tasks.dev.leetcyber.com
-    secretName: tasks-external-cert
+    secretName: tasks-external-cert-prod-clusterissuer
   ingressClassName: external-nginx
   rules:
   - host: tasks.dev.leetcyber.com

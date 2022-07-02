@@ -11,7 +11,7 @@ spec:
   tls:
   - hosts:
     - tasks.{{ .Values.envName }}.leetcyber.com
-    secretName: tasks-external-cert
+    secretName: tasks-external-cert-prod-clusterissuer
   ingressClassName: external-nginx
   rules:
   - host: tasks.{{ .Values.envName }}.leetcyber.com
