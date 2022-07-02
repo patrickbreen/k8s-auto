@@ -41,6 +41,8 @@ kind: Service
 metadata:
   name: tasks
   namespace: tasks
+  labels:
+    name: tasks
 spec:
   type: ClusterIP
   ports:
@@ -48,8 +50,30 @@ spec:
       targetPort: 8080
       protocol: TCP
       name: http
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+      name: metrics
   selector:
     app.kubernetes.io/name: tasks
+---
+# Source: wave3-app-tasks/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: tasks-canary
+  namespace: tasks
+  labels:
+    name: tasks-canary
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9000
+      targetPort: 9000
+      protocol: TCP
+      name: metrics
+  selector:
+    app.kubernetes.io/name: tasks-canary
 ---
 # Source: wave3-app-tasks/templates/canary.yaml
 apiVersion: apps/v1
@@ -184,6 +208,42 @@ spec:
         pathType: Prefix
 status:
   loadBalancer: {}
+---
+# Source: wave3-app-tasks/templates/servicemonitors.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: tasks
+  namespace: tasks
+spec:
+  endpoints:
+  - interval: 30s
+    path: /metrics
+    port: 9000
+  namespaceSelector:
+    matchNames:
+    - tasks
+  selector:
+    matchLabels:
+      name: tasks
+---
+# Source: wave3-app-tasks/templates/servicemonitors.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: tasks-canary
+  namespace: tasks
+spec:
+  endpoints:
+  - interval: 30s
+    path: /metrics
+    port: 9000
+  namespaceSelector:
+    matchNames:
+    - tasks
+  selector:
+    matchLabels:
+      name: tasks-canary
 ---
 # Source: wave3-app-tasks/templates/postgres.yaml
 apiVersion: "acid.zalan.do/v1"
