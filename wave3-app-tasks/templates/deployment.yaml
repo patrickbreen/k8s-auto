@@ -10,7 +10,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app.kubernetes.io/name: tasks
+      name: tasks
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -23,7 +23,7 @@ spec:
         prometheus.io/port: "9000"
         prometheus.io/scrape: "true"
       labels:
-        app.kubernetes.io/name: tasks
+        name: tasks
     spec:
       containers:
       - env:

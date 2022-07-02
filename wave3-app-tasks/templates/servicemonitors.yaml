@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: tasks
-  namespace: tasks
+  namespace: monitoring
 spec:
   endpoints:
   - interval: 30s
@@ -19,7 +19,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: tasks-canary
-  namespace: tasks
+  namespace: monitoring
 spec:
   endpoints:
   - interval: 30s
