@@ -131,7 +131,7 @@ spec:
           name: http
           protocol: TCP
         - containerPort: 9000
-          name: http
+          name: metrics
           protocol: TCP
         livenessProbe:
           failureThreshold: 3
