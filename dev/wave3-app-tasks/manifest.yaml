@@ -219,7 +219,7 @@ spec:
   endpoints:
   - interval: 30s
     path: /metrics
-    port: 9000
+    port: metrics
   namespaceSelector:
     matchNames:
     - tasks
@@ -237,7 +237,7 @@ spec:
   endpoints:
   - interval: 30s
     path: /metrics
-    port: 9000
+    port: metrics
   namespaceSelector:
     matchNames:
     - tasks
