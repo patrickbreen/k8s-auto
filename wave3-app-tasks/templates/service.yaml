@@ -11,7 +11,6 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/instance: wave3-app-tasks-dev
-    app.kubernetes.io/name: wave3-app-tasks
+    app.kubernetes.io/name: tasks
 
 

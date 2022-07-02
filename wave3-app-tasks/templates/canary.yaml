@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasks-canary
+  namespace: tasks
+spec:
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tasks-canary
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "9000"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/name: tasks-canary
+    spec:
+      containers:
+      - env:
+        - name: ENV_NAME
+          value: "{{ .Values.envName }}"
+        image: "{{ .Values.imageRepository }}-canary@{{ .Values.canaryImageHash }}"
+        ports:
+        - containerPort: 900
+          name: http
+          protocol: TCP
+        name: tasks-canary
+      serviceAccount: tasks
+      serviceAccountName: tasks

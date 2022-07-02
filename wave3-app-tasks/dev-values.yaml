@@ -1,4 +1,6 @@
-replicaCount: 2
 envName: dev
-imageRepository: ghcr.io/patrickbreen/k8s-tasks
-imageHash: sha256:6af3243ac78a3cc1dba61e03a8a320b8ce58d526150a19f988ecc1a5e3d28531
+imageRepository: ghcr.io/patrickbreen/k8s-tasks-app
+
+appReplicaCount: 2
+appImageHash: sha256:5b832246a90f56f52c930d4c2381f66e57abf23e4e9ad6b936d8a493d06d66fe
+canaryImageHash: sha256:c034b2710f234933baaff68119794e0b2a6b558061f5ede215db2a4bace7c03b

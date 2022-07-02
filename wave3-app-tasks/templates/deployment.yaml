@@ -2,20 +2,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/instance: wave3-app-tasks
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: wave3-app-tasks
-    app.kubernetes.io/version: 0.1.0
-    helm.sh/chart: wave3-app-tasks-0.1.0
-  name: wave3-app-tasks-dev
+    app.kubernetes.io/name: tasks
+  name: tasks
   namespace: tasks
 spec:
-  replicas: !!int "{{ .Values.replicaCount }}"
+  replicas: !!int "{{ .Values.appReplicaCount }}"
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app.kubernetes.io/instance: wave3-app-tasks-dev
-      app.kubernetes.io/name: wave3-app-tasks
+      app.kubernetes.io/name: tasks
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -25,11 +20,10 @@ spec:
     metadata:
       annotations:
         prometheus.io/path: /metrics
-        prometheus.io/port: "8080"
+        prometheus.io/port: "9000"
         prometheus.io/scrape: "true"
       labels:
-        app.kubernetes.io/instance: wave3-app-tasks-dev
-        app.kubernetes.io/name: wave3-app-tasks
+        app.kubernetes.io/name: tasks
     spec:
       containers:
       - env:
@@ -38,9 +32,12 @@ spec:
             secretKeyRef:
               key: password
               name: app-user.tasks-postgres.credentials.postgresql.acid.zalan.do
-        image: "{{ .Values.imageRepository }}@{{ .Values.imageHash }}"
+        image: "{{ .Values.imageRepository }}-app@{{ .Values.appImageHash }}"
         ports:
         - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9000
           name: http
           protocol: TCP
         livenessProbe:
@@ -52,7 +49,7 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-        name: wave3-app-tasks
+        name: tasks
         readinessProbe:
           failureThreshold: 3
           httpGet:
