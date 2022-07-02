@@ -81,7 +81,7 @@ spec:
       - env:
         - name: ENV_NAME
           value: "dev"
-        image: "ghcr.io/patrickbreen/k8s-tasks-canary@sha256:c034b2710f234933baaff68119794e0b2a6b558061f5ede215db2a4bace7c03b"
+        image: "ghcr.io/patrickbreen/k8s-tasks-canary@sha256:087039169e799684efbabd6c63856ba494fffe489450147fe5605b489669d404"
         ports:
         - containerPort: 900
           name: http
