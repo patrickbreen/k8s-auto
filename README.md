@@ -49,26 +49,25 @@ argocd app sync apps --prune
 
 5. Cert manager failed me, so I had to manually "kubectl edit" the ingresses it created for ACME to add the right ingress class "ingressClassName: external-nginx"
 
-6. There are a couple more things below, but that is basically it.
+6. The helm chart for kube-prometheus also failed me, so I used kubectl to install the base stack. Maybe this can be rolled into an argo Application. I'm not sure how to do that at this time because the --server-side syntax is important, and I'm not sure how to do that in an argo Application.
 
-
-There was (atleast) one thing I had to manually apply this CRD manifest because argo/helm/kubernetes thought it was too long
-`k create -f https://raw.githubusercontent.com/prometheus-community/helm-charts/main/charts/kube-prometheus-stack/crds/crd-prometheuses.yaml`
-
-### Infra environment promotion strategy:
-1. no auto syncing in argocd (I'm going to allow auto syncing in dev though)
-2. Merge request triggers kubesec scan
-3. on merge to main, pipeline deploys to dev, checks health, then deploys to prod, checks health etc.
-
-
-### App repo layout:
 ```
-app/code/
-app/Dockerfile
-canary/code/
-canary/Dockerfile
-runner/Dockerfile
+kubectl apply --server-side -f manifests/setup
+until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
+kubectl apply -f manifests/
+# I also just deleted the network policies for prometheus and grafana so that my ingresses work
+# security considerations understood
+# again I really need to somehow version control and CD my prometheus infra
 ```
+
+7. There are a couple more things below, but that is basically it.
+
+
+### Infra environment promotion strategy (todo):
+1. No auto syncing in argocd (I'm going to allow auto syncing in dev though)
+2. Merge request triggers kubesec scan, trivy etc.
+3. On merge to main, pipeline deploys to dev, checks health, then deploys to prod, checks health etc.
+
 #### On app repo merge request (also have a script.sh that can do this all locally, and pre-commit):
 1. Build code and Docker image
 2. Test Container (maybe parallel tests)
