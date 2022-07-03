@@ -11,7 +11,6 @@ metadata:
     nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
     nginx.ingress.kubernetes.io/auth-tls-secret: "tasks/ca-cert"
     nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
-    nginx.ingress.kubernetes.io/auth-tls-error-page: "https://tasks.{{ .Values.envName }}.leetcyber.com/error-cert.html"
 spec:
   tls:
   - hosts:

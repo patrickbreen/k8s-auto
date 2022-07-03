@@ -3,4 +3,4 @@ imageRepository: ghcr.io/patrickbreen/k8s-tasks
 
 appReplicaCount: 2
 appImageHash: sha256:fe529f80c20a2fdc951bbd577bfd195accc8bf67e02f266ba7cb067197fbf258
-canaryImageHash: sha256:cf3667254785bf370c73cd3047cbacf6a8ed65509c84879b6349298a1b7e0141
+canaryImageHash: sha256:523ef08ced50791870a2522f31f93cde69887787bc443e5807a55425ffda2bd3

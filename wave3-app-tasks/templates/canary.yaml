@@ -23,11 +23,20 @@ spec:
       labels:
         name: tasks-canary
     spec:
+      volumes:
+      - name: certs
+        secret:
+          secretName: canary-certs
+
       containers:
       - env:
         - name: ENV_NAME
           value: "{{ .Values.envName }}"
         image: "{{ .Values.imageRepository }}-canary@{{ .Values.canaryImageHash }}"
+        volumeMounts:
+        - name: certs
+          readOnly: true
+          mountPath: "/certs"
         ports:
         - containerPort: 900
           name: http

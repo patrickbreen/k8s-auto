@@ -150,11 +150,20 @@ spec:
       labels:
         name: tasks-canary
     spec:
+      volumes:
+      - name: certs
+        secret:
+          secretName: canary-certs
+
       containers:
       - env:
         - name: ENV_NAME
           value: "dev"
-        image: "ghcr.io/patrickbreen/k8s-tasks-canary@sha256:cf3667254785bf370c73cd3047cbacf6a8ed65509c84879b6349298a1b7e0141"
+        image: "ghcr.io/patrickbreen/k8s-tasks-canary@sha256:523ef08ced50791870a2522f31f93cde69887787bc443e5807a55425ffda2bd3"
+        volumeMounts:
+        - name: certs
+          readOnly: true
+          mountPath: "/certs"
         ports:
         - containerPort: 900
           name: http
@@ -242,7 +251,6 @@ metadata:
     nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
     nginx.ingress.kubernetes.io/auth-tls-secret: "tasks/ca-cert"
     nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
-    nginx.ingress.kubernetes.io/auth-tls-error-page: "https://tasks.dev.leetcyber.com/error-cert.html"
 spec:
   tls:
   - hosts:
