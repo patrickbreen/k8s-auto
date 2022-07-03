@@ -198,7 +198,7 @@ spec:
             secretKeyRef:
               key: password
               name: app-user.tasks-postgres.credentials.postgresql.acid.zalan.do
-        image: "ghcr.io/patrickbreen/k8s-tasks-app@sha256:28ab9380f04c437e09cbddc7b013c54c6b702388ccbae6ebe2e38cfb02c3cace"
+        image: "ghcr.io/patrickbreen/k8s-tasks-app@sha256:fe529f80c20a2fdc951bbd577bfd195accc8bf67e02f266ba7cb067197fbf258"
         ports:
         - containerPort: 8080
           name: http
@@ -238,6 +238,11 @@ metadata:
     nginx.ingress.kubernetes.io/enable-modsecurity: "true"
     nginx.ingress.kubernetes.io/enable-owasp-core-rules: "true"
     cert-manager.io/cluster-issuer: "letsencrypt-production"
+    # Enable client certificate authentication
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-secret: "tasks/ca-cert"
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+    nginx.ingress.kubernetes.io/auth-tls-error-page: "https://tasks.dev.leetcyber.com/error-cert.html"
 spec:
   tls:
   - hosts:
