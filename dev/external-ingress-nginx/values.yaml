@@ -1,5 +1,7 @@
 ingress-nginx:
   controller:
+    autoscaling:
+      enabled: true
     metrics:
       enabled: true
       serviceMonitor:
@@ -11,3 +13,4 @@ ingress-nginx:
       enabled: true
       default: false
       controllerValue: "k8s.io/external-ingress-nginx"
+

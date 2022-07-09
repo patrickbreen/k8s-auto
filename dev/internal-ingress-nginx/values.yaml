@@ -1,5 +1,7 @@
 ingress-nginx:
   controller:
+    autoscaling:
+      enabled: true
     metrics:
       enabled: true
       serviceMonitor:
