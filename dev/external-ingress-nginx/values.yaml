@@ -1,5 +1,17 @@
 ingress-nginx:
   controller:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/instance
+                operator: In
+                values:
+                - external-ingress-nginx
+            topologyKey: kubernetes.io/hostname
     metrics:
       enabled: true
       serviceMonitor:
