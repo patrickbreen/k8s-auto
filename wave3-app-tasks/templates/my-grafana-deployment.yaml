@@ -72,6 +72,9 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/tasks-canary
           name: grafana-dashboard-tasks-canary
           readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/ingress-nginx
+          name: grafana-dashboard-ingress-nginx
+          readOnly: false
 
         - mountPath: /grafana-dashboard-definitions/0/alertmanager-overview
           name: grafana-dashboard-alertmanager-overview
@@ -177,6 +180,9 @@ spec:
       - configMap:
           name: grafana-dashboard-tasks-canary
         name: grafana-dashboard-tasks-canary
+      - configMap:
+          name: grafana-dashboard-ingress-nginx
+        name: grafana-dashboard-ingress-nginx
 
       - configMap:
           name: grafana-dashboard-alertmanager-overview
