@@ -37,8 +37,6 @@ spec:
     size: 6Gi
     storageClass: longhorn
   numberOfInstances: 2
-  kubernetes:
-    pod_antiaffinity: true
   patroni:
     pg_hba:
       - local all,replication all md5
