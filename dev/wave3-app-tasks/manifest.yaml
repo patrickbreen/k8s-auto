@@ -862,7 +862,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: password
-              name: app-user.tasks-postgres.credentials.postgresql.acid.zalan.do
+              name: owner.tasks-postgres.credentials.postgresql.acid.zalan.do
         image: "ghcr.io/patrickbreen/k8s-tasks-app@sha256:fe529f80c20a2fdc951bbd577bfd195accc8bf67e02f266ba7cb067197fbf258"
         ports:
         - containerPort: 8080
@@ -1252,12 +1252,8 @@ spec:
     owner:
     - superuser
     - createdb
-    # role for application
-    app-user: []
 
   #databases: name->owner
-  preparedDatabases:
-    tasks: {}
   databases:
     app: owner
   postgresql:

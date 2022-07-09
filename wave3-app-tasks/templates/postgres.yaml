@@ -48,12 +48,8 @@ spec:
     owner:
     - superuser
     - createdb
-    # role for application
-    app-user: []
 
   #databases: name->owner
-  preparedDatabases:
-    tasks: {}
   databases:
     app: owner
   postgresql:
