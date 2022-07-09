@@ -1,0 +1,11 @@
+prometheus-postgres-exporter:
+  serviceMonitor:
+    enabled: true
+  config:
+    datasource:
+      host: tasks-postgres-master.tasks.svc
+      user: owner
+      passwordSecret:
+        name: owner.tasks-postgres.credentials.postgresql.acid.zalan.do
+        key: password
+      database: app

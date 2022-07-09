@@ -803,7 +803,7 @@ spec:
       - env:
         - name: ENV_NAME
           value: "dev"
-        image: "ghcr.io/patrickbreen/k8s-tasks-canary@sha256:523ef08ced50791870a2522f31f93cde69887787bc443e5807a55425ffda2bd3"
+        image: "ghcr.io/patrickbreen/k8s-tasks-canary@sha256:5255ad02f055c9ebd93b48dbe4ec0c4852ac7c5c332a3238146088ef44d29c0d"
         volumeMounts:
         - name: certs
           readOnly: true
@@ -863,7 +863,7 @@ spec:
             secretKeyRef:
               key: password
               name: owner.tasks-postgres.credentials.postgresql.acid.zalan.do
-        image: "ghcr.io/patrickbreen/k8s-tasks-app@sha256:fe529f80c20a2fdc951bbd577bfd195accc8bf67e02f266ba7cb067197fbf258"
+        image: "ghcr.io/patrickbreen/k8s-tasks-app@sha256:3fcd3fb06eb4d4f5008789d27faa0831019b665292235cf22a06298d01caf55c"
         ports:
         - containerPort: 8080
           name: http
