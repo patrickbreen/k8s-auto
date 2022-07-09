@@ -72,6 +72,9 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/tasks-canary
           name: grafana-dashboard-tasks-canary
           readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/tasks-postgres
+          name: grafana-dashboard-tasks-postgres
+          readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/ingress-nginx
           name: grafana-dashboard-ingress-nginx
           readOnly: false
@@ -180,6 +183,9 @@ spec:
       - configMap:
           name: grafana-dashboard-tasks-canary
         name: grafana-dashboard-tasks-canary
+      - configMap:
+          name: grafana-dashboard-tasks-postgres
+        name: grafana-dashboard-tasks-postgres
       - configMap:
           name: grafana-dashboard-ingress-nginx
         name: grafana-dashboard-ingress-nginx
