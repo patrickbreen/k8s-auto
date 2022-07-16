@@ -1,6 +1,0 @@
-keycloak:
-  global:
-    storageClass: longhorn
-  postgresql:
-    auth:
-      password: "secretpassword"

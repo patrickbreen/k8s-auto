@@ -60,7 +60,13 @@ kubectl apply -f manifests/
 # again I really need to somehow version control and CD my prometheus infra
 ```
 
-7. There are a couple more things below, but that is basically it.
+7. For keycloak, I'm messing with an alpha version of a keycloak operator, so it also isn't built into argoCD at this time either:
+
+```
+kubectl create -f https://operatorhub.io/install/alpha/keycloak-operator.yaml
+```
+
+8. There are a couple more things below, but that is basically it.
 
 
 ### Infra environment promotion strategy (todo):
