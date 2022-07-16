@@ -56,7 +56,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: keycloak
-  namespace: keycloak
+  namespace: my-keycloak-operator
   annotations:
     cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
 spec:

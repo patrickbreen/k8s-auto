@@ -1629,6 +1629,40 @@ rules:
 ---
 # Source: wave2-infra/templates/permissions_for_prom_operator.yaml
 apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: prometheus-k8s
+  namespace: my-keycloak-operator
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  - endpoints
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - watch
+---
+# Source: wave2-infra/templates/permissions_for_prom_operator.yaml
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: prometheus-k8s
@@ -1648,6 +1682,21 @@ kind: RoleBinding
 metadata:
   name: prometheus-k8s
   namespace: internal-ingress-nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: prometheus-k8s
+subjects:
+- kind: ServiceAccount
+  name: prometheus-k8s
+  namespace: monitoring
+---
+# Source: wave2-infra/templates/permissions_for_prom_operator.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: prometheus-k8s
+  namespace: my-keycloak-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -1718,7 +1767,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: keycloak
-  namespace: keycloak
+  namespace: my-keycloak-operator
   annotations:
     cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
 spec:
