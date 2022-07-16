@@ -1,0 +1,17 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+  name: my-keycloakrealm
+  namespace: my-keycloak-operator
+  labels:
+    app: sso
+spec:
+  realm:
+    id: basic
+    realm: basic
+    enabled: true
+    displayName: Basic Realm
+  instanceSelector:
+    matchLabels:
+      app: sso
+

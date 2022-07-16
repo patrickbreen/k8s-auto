@@ -1875,6 +1875,74 @@ spec:
         ingress:
           class: external-nginx
 ---
+# Source: wave2-infra/templates/keycloak.yaml
+apiVersion: keycloak.org/v1alpha1
+kind: Keycloak
+metadata:
+  name: my-keycloak
+  namespace: my-keycloak-operator
+  labels:
+    app: sso
+spec:
+  instances: 1
+  externalAccess:
+    enabled: true
+---
+# Source: wave2-infra/templates/keycloak-client.yaml
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakClient
+metadata:
+  name: client-secret
+  namespace: my-keycloak-operator
+  labels:
+    app: sso
+spec:
+  realmSelector:
+    matchLabels:
+      app: sso
+  client:
+    clientId: client-secret
+    secret: client-secret
+    clientAuthenticatorType: client-secret
+---
+# Source: wave2-infra/templates/keycloak-realm.yaml
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+  name: my-keycloakrealm
+  namespace: my-keycloak-operator
+  labels:
+    app: sso
+spec:
+  realm:
+    id: basic
+    realm: basic
+    enabled: true
+    displayName: Basic Realm
+  instanceSelector:
+    matchLabels:
+      app: sso
+---
+# Source: wave2-infra/templates/keycloak-user.yaml
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakUser
+metadata:
+  name: my-admin
+  namespace: my-keycloak-operator
+  labels:
+    app: sso
+spec:
+  user:
+    username: admin
+    firstName: Admin
+    lastName: Admin
+    email: user@example.com
+    enabled: true
+    emailVerified: false
+  realmSelector:
+    matchLabels:
+      app: sso
+---
 # Source: wave2-infra/templates/github-runner.yaml
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: Runner

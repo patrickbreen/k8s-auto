@@ -1,0 +1,19 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakUser
+metadata:
+  name: my-admin
+  namespace: my-keycloak-operator
+  labels:
+    app: sso
+spec:
+  user:
+    username: admin
+    firstName: Admin
+    lastName: Admin
+    email: user@example.com
+    enabled: true
+    emailVerified: false
+  realmSelector:
+    matchLabels:
+      app: sso
+
