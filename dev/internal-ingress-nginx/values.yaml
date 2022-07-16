@@ -1,5 +1,7 @@
 ingress-nginx:
   controller:
+    extraArgs:
+      enable-ssl-passthrough: ""
     replicaCount: 2
     affinity:
       podAntiAffinity:
