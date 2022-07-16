@@ -1934,8 +1934,6 @@ metadata:
     app: sso
 spec:
   instances: 1
-  externalAccess:
-    enabled: true
 ---
 # Source: wave2-infra/templates/keycloak-client.yaml
 apiVersion: keycloak.org/v1alpha1

@@ -7,5 +7,3 @@ metadata:
     app: sso
 spec:
   instances: 1
-  externalAccess:
-    enabled: true
