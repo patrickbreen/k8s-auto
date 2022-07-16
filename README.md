@@ -60,19 +60,18 @@ kubectl apply -f manifests/
 # again I really need to somehow version control and CD my prometheus infra
 ```
 
-7. For keycloak, I'm messing with an alpha version of a keycloak operator, so it also isn't built into argoCD at this time either:
+7. For keycloak, I'm messing with an alpha version of a keycloak operator, so it also isn't built into argoCD at this time either. This is TODO.
 
 ```
-kubectl create -f https://operatorhub.io/install/alpha/keycloak-operator.yaml
+https://operatorhub.io/operator/keycloak-operator
 ```
 
 8. There are a couple more things below, but that is basically it.
 
 
 ### Infra environment promotion strategy (todo):
-1. No auto syncing in argocd (I'm going to allow auto syncing in dev though)
-2. Merge request triggers kubesec scan, trivy etc.
-3. On merge to main, pipeline deploys to dev, checks health, then deploys to prod, checks health etc.
+1. Merge request triggers kubesec scan, trivy etc.
+2. On merge to main, pipeline deploys to dev, checks health, then deploys to prod, checks health etc.
 
 #### On app repo merge request (also have a script.sh that can do this all locally, and pre-commit):
 1. Build code and Docker image
@@ -91,13 +90,9 @@ kubectl create secret generic controller-manager -n actions-runner-system --from
 ```
 
 ### Further things to do:
-* storage: figure out storage replication
-* db: actually handle the dbs in a safe way
-* management: upgrades, HPA, pod antiaffinity, day 2 ops (automation)
 * network: layer3 VIPs with BGP, more segmentation, etc.
-* environments: actually run multi cluster multi environments
 * security: OPA gatekeeper, falco, audit, trivy
-* logging: Some centralized logging solution thing
-* scaling teams: talk through how to split out teams/apps/repos, how to do multi prod.
+* monitoring: get prometheus operator components more organized. Centralize the service monitors in the monitoring namespace?
+* auth: get keycloak operator working
 
 

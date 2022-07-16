@@ -1,6 +1,6 @@
 apiVersion: v2
-name: postgres-exporter
-description: Postgres exporter for prometheus
+name: postgres-exporter-master
+description: Postgres exporter for prometheus master
 
 # A chart can be either an 'application' or a 'library' chart.
 #
