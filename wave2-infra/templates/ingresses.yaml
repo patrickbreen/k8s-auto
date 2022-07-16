@@ -73,7 +73,7 @@ spec:
           service:
             name: keycloak
             port:
-              number: 80
+              number: 8443
         path: /
         pathType: Prefix
 status:
