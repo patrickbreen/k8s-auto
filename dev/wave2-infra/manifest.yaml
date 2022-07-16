@@ -1982,7 +1982,7 @@ metadata:
     app: sso
 spec:
   user:
-    username: admin
+    username: my-admin
     firstName: Admin
     lastName: Admin
     email: user@example.com
