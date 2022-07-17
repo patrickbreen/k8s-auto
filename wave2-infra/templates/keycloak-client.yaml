@@ -21,3 +21,6 @@ spec:
     baseUrl: "/"
     rootUrl: "http://oauth.dev.leetcyber.com"
     standardFlowEnabled: true
+    defaultClientScopes:
+      - "email"
+      - "proflie"
