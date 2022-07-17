@@ -1949,6 +1949,12 @@ spec:
     clientId: client-secret
     secret: client-secret
     clientAuthenticatorType: client-secret
+    directAccessGrant: true
+    fullScopeAllowed: true
+    publicClient: true
+    redirectUris: "*"
+    baseUrl: "/"
+    rootUrl: "http://oauth.dev.leetcyber.com"
 ---
 # Source: wave2-infra/templates/keycloak-realm.yaml
 apiVersion: keycloak.org/v1alpha1
