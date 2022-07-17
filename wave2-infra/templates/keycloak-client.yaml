@@ -23,4 +23,4 @@ spec:
     standardFlowEnabled: true
     defaultClientScopes:
       - "email"
-      - "proflie"
+      - "profile"

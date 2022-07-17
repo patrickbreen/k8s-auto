@@ -1959,7 +1959,7 @@ spec:
     standardFlowEnabled: true
     defaultClientScopes:
       - "email"
-      - "proflie"
+      - "profile"
 ---
 # Source: wave2-infra/templates/keycloak-realm.yaml
 apiVersion: keycloak.org/v1alpha1
