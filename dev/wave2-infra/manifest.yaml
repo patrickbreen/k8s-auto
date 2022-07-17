@@ -1956,6 +1956,7 @@ spec:
       - "*"
     baseUrl: "/"
     rootUrl: "http://oauth.dev.leetcyber.com"
+    standardFlowEnabled: true
 ---
 # Source: wave2-infra/templates/keycloak-realm.yaml
 apiVersion: keycloak.org/v1alpha1
