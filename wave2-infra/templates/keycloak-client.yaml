@@ -13,9 +13,10 @@ spec:
     clientId: client-secret
     secret: client-secret
     clientAuthenticatorType: client-secret
-    directAccessGrant: true
+    directAccessGrantsEnabled: true
     fullScopeAllowed: true
     publicClient: true
-    redirectUris: "*"
+    redirectUris:
+      - "*"
     baseUrl: "/"
     rootUrl: "http://oauth.dev.leetcyber.com"
