@@ -17,7 +17,7 @@ provider "libvirt" {
 resource "libvirt_pool" "ubuntu" {
   name = "ubuntu"
   type = "dir"
-  path = "/tmp/terraform-provider-libvirt-pool-ubuntu"
+  path = "/home/leet/workplace/k8s-auto/vms_infra/terraform-provider-libvirt-pool-ubuntu"
 }
 
 # Create the network
