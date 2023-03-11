@@ -11,12 +11,15 @@ terraform {
 data "template_file" "user_data" {
   template = file("${path.module}/cloud_init.cfg")
   vars = {
-    my_hostname = "${var.hostname}"
+    my_hostname = "${var.hostname}",
   }
 }
 
 data "template_file" "network_config" {
   template = file("${path.module}/network_config.cfg")
+  vars = {
+    my_static_ip = "${var.static_ip}",
+  }
 }
 
 resource "libvirt_cloudinit_disk" "commoninit" {
@@ -43,6 +46,7 @@ resource "libvirt_domain" "domain-ubuntu" {
 
   network_interface {
     network_name = "k8snet"
+    wait_for_lease = false
   }
 
   console {

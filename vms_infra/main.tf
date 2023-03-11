@@ -25,12 +25,33 @@ resource "libvirt_network" "kube_network" {
   name = "k8snet"
   mode = "bridge"
   bridge = "br0"
+  dhcp {
+    enabled = false
+  }
+  addresses = ["192.168.0.0/16",]
 }
 
 # I made my own module that will create each instace, and disk and userdata etc.
 module "libvirt-instances" {
   source = "./modules/libvirt-instance"
-  for_each = toset(var.hostnames)
-  hostname = each.value
+  for_each = var.hostnames
+  hostname = each.key
+  static_ip = each.value
   pool_name = libvirt_pool.ubuntu.name
 }
+
+# Start all networks
+#resource "null_resource" "start_networks" {
+#  depends_on = [libvirt_network.kube_network]
+#  provisioner "local-exec" {
+#    command = "virsh net-start k8snet}"
+#  }
+#}
+
+# Start all VMs
+#resource "null_resource" "start_domains" {
+#  depends_on = [module.libvirt-instances]
+#  provisioner "local-exec" {
+#    command = "virsh list --all | grep -v State | awk '{print $2}' | xargs -I {} virsh start {}"
+#  }
+#}

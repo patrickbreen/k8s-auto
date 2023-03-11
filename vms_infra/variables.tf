@@ -1,6 +1,13 @@
 variable "hostnames" {
   description = "my hostnames"
-  type        = list(string)
-  default     = ["control1", "control2", "control3", "worker1", "worker2", "worker3"]
+  type        = map(string)
+  default     = {
+    "control1": "192.168.0.31",
+    "control2": "192.168.0.32",
+    "control3": "192.168.0.33",
+    "worker1": "192.168.0.34",
+    "worker2": "192.168.0.35",
+    "worker3": "192.168.0.36"
+  }
 }
 
