@@ -1,0 +1,15 @@
+# /etc/netplan/01-netcfg.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp4s0:
+      dhcp4: no
+  bridges:
+    br0:
+      interfaces: [enp4s0]
+      dhcp4: no
+      addresses: [192.168.0.10/24]
+      gateway4: 192.168.0.1
+      nameservers:
+        addresses: [192.168.0.1]

@@ -1,0 +1,19 @@
+apiVersion: v1
+items:
+- apiVersion: metallb.io/v1beta2
+  kind: BGPPeer
+  metadata:
+    annotations:
+    name: default
+    namespace: metallb-system
+  spec:
+    bfdProfile: bfd-prof
+    myASN: 64520
+    peerASN: 64521
+    peerAddress: 192.168.0.10
+    peerPort: 179
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
+
