@@ -25,10 +25,11 @@ resource "libvirt_network" "kube_network" {
   name = "k8snet"
   mode = "bridge"
   bridge = "br0"
+  autostart = true
   dhcp {
     enabled = false
   }
-  addresses = ["192.168.0.0/16",]
+  addresses = ["192.168.0.0/24",]
 }
 
 # I made my own module that will create each instace, and disk and userdata etc.
