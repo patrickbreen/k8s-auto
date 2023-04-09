@@ -1,0 +1,132 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: longhorn
+  namespace: longhorn-system
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - longhorn.{{ .Values.envName }}.leetcyber.com
+    secretName: longhorn-internal-cert
+  ingressClassName: internal-nginx
+  rules:
+  - host: longhorn.{{ .Values.envName }}.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: longhorn-frontend
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak
+  namespace: my-keycloak-operator
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+spec:
+  ingressClassName: internal-nginx
+  rules:
+  - host: keycloak.{{ .Values.envName }}.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: keycloak
+            port:
+              number: 8443
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio
+  namespace: minio
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - minio.{{ .Values.envName }}.leetcyber.com
+    secretName: minio-internal-cert
+  ingressClassName: internal-nginx
+  rules:
+  - host: minio.{{ .Values.envName }}.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: minio
+            port:
+              number: 9001
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus
+  namespace: monitoring
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - prometheus.{{ .Values.envName }}.leetcyber.com
+    secretName: prometheus-internal-cert
+  ingressClassName: internal-nginx
+  rules:
+  - host: prometheus.{{ .Values.envName }}.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: prometheus-k8s
+            port:
+              number: 9090
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  namespace: monitoring
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - grafana.{{ .Values.envName }}.leetcyber.com
+    secretName: grafana-internal-cert
+  ingressClassName: internal-nginx
+  rules:
+  - host: grafana.{{ .Values.envName }}.leetcyber.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: grafana
+            port:
+              number: 3000
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}
